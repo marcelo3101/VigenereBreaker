@@ -25,7 +25,12 @@ char * cifrador(char keystream[20], char message[20]) {
     char * encripted = malloc(sizeof(char)*20);
 
     for( int i = 0; i < strlen(message); i++) {
+        if(message[i] == ' ') {
+            encripted[i] = ' ';
+        }
+        else {
         encripted[i] = ((message[i] + keystream[i]) % 26) + 'A';
+        }
     }
     
     return encripted;
@@ -36,22 +41,41 @@ char * decifrador(char keystream[20], char encripted_message[20]){
     char * decripted = malloc(sizeof(char)*20);
 
     for( int i = 0; i < strlen(encripted_message); i++) {
+        if(encripted_message[i] == ' ') {
+            decripted[i] = ' ';
+        }
+        else {
         decripted[i] = ((encripted_message[i] - keystream[i] + 26) % 26) + 'A';
+        }
     }
     
     return decripted;
 }
 
+char * capitalize(char string[20]) {
+    for (int i = 0; i < strlen(string); i++) {
+      if(string[i] >= 'a' && string[i] <= 'z') {
+         string[i] = string[i] -32;
+      }
+   }
+   return string;
+}
+
 int main(){
-    char message[20], keyword[20], * keystream = malloc(sizeof(char) * 20), * encriptedmessage = malloc(sizeof(char) * 20), * decriptedmessage = malloc(sizeof(char) * 20);
+    char * message = malloc(sizeof(char) * 20),* keyword = malloc(sizeof(char) * 20), * keystream = malloc(sizeof(char) * 20), * encriptedmessage = malloc(sizeof(char) * 20), * decriptedmessage = malloc(sizeof(char) * 20);
     // Receber keyword e mensagem
     printf("Digite a keyword: ");
-    scanf("%s", &keyword);
+    gets(keyword);
     printf("Digite a mensagem: ");
-    scanf("%s", &message);
+    gets(message);
+
+    keyword = capitalize(keyword);
+    message = capitalize(message);
     
     // Montar a Keystream
     keystream = keystream_generator(keyword, message);
+
+    printf("%s\n", keystream);
 
     // Encriptar e decriptar
     encriptedmessage = cifrador(keystream, message);
