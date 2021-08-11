@@ -29,16 +29,13 @@ def show_coincidences(cipherText):
 
 def get_c(sequence):
 	
-	N = float(len(sequence))
-	frequency_sum = 0.0
-
-	# Using Index of Coincidence formula
-	for letter in letters:
-		frequency_sum+= sequence.count(letter) * (sequence.count(letter)-1)
-
-	# Using Index of Coincidence formula
-	index = frequency_sum/(N*(N-1))
-	return index
+    N = float(len(sequence))
+    frequency_sum = 0.0
+    for letter in letters:
+	    frequency_sum+= sequence.count(letter) * (sequence.count(letter)-1)
+    if N*(N-1) <= 0: index = frequency_sum/1
+    else: index = frequency_sum/(N*(N-1))
+    return index
 
 def probable_key_length(ciphertext):
     coincidences = []
