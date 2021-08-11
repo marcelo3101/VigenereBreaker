@@ -33,7 +33,7 @@ def get_c(sequence):
     frequency_sum = 0.0
     for letter in letters:
 	    frequency_sum+= sequence.count(letter) * (sequence.count(letter)-1)
-    if N*(N-1) <= 0: index = frequency_sum/1
+    if N*(N-1) <= 0: index = frequency_sum/N
     else: index = frequency_sum/(N*(N-1))
     return index
 

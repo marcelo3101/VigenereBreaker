@@ -5,11 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 
 // Gerador de Keystream
-char * keystream_generator(char secret_word[20], char message[20]) {
-    char * extkeyword = malloc(sizeof(char)*20);
+char * keystream_generator(char secret_word[1000], char message[1000]) {
+    char * extkeyword = malloc(sizeof(char)*1000);
     for(int i = 0, j = 0; i < strlen(message); i++, j++) {
         if(j == strlen(secret_word)) j = 0;
         extkeyword[i] = secret_word[j];
@@ -21,15 +21,13 @@ char * keystream_generator(char secret_word[20], char message[20]) {
 }
 
 // Cifrador
-char * cifrador(char keystream[20], char message[20]) {
-    char * encripted = malloc(sizeof(char)*20);
-
+char * cifrador(char keystream[1000], char message[1000]) {
+    char * encripted = malloc(sizeof(char)*1000);
+    int j = 0;
     for( int i = 0; i < strlen(message); i++) {
-        if(message[i] == ' ') {
-            encripted[i] = ' ';
-        }
-        else {
-        encripted[i] = ((message[i] + keystream[i]) % 26) + 'A';
+        if(message[i] != ' ') {
+            encripted[j] = ((message[i] + keystream[j]) % 26) + 'A';
+            j++;
         }
     }
     
@@ -37,8 +35,8 @@ char * cifrador(char keystream[20], char message[20]) {
 }
 
 // Decifrador
-char * decifrador(char keystream[20], char encripted_message[20]){
-    char * decripted = malloc(sizeof(char)*20);
+char * decifrador(char keystream[1000], char encripted_message[1000]){
+    char * decripted = malloc(sizeof(char)*1000);
 
     for( int i = 0; i < strlen(encripted_message); i++) {
         if(encripted_message[i] == ' ') {
@@ -52,36 +50,48 @@ char * decifrador(char keystream[20], char encripted_message[20]){
     return decripted;
 }
 
-char * capitalize(char string[20]) {
+char * capitalize(char string[1000]) {
     for (int i = 0; i < strlen(string); i++) {
       if(string[i] >= 'a' && string[i] <= 'z') {
          string[i] = string[i] -32;
+      }
+      if(!isalpha(string[i])){
+          string[i] = ' ';
       }
    }
    return string;
 }
 
 int main(){
-    char * message = malloc(sizeof(char) * 20),* keyword = malloc(sizeof(char) * 20), * keystream = malloc(sizeof(char) * 20), * encriptedmessage = malloc(sizeof(char) * 20), * decriptedmessage = malloc(sizeof(char) * 20);
+    char * message = malloc(sizeof(char) * 1000),* keyword = malloc(sizeof(char) * 1000), * keystream = malloc(sizeof(char) * 1000), * encriptedmessage = malloc(sizeof(char) * 1000), * decriptedmessage = malloc(sizeof(char) * 1000);
+    char * option = malloc(sizeof(char));
     // Receber keyword e mensagem
-    printf("Digite a keyword: ");
-    gets(keyword);
-    printf("Digite a mensagem: ");
-    gets(message);
+    printf("Digite 'e' para encriptar e 'd' para decriptar ");
+    scanf("%c", option);
 
-    keyword = capitalize(keyword);
-    message = capitalize(message);
-    
-    // Montar a Keystream
-    keystream = keystream_generator(keyword, message);
+    if(*option == 'e'){
+        printf("Digite a keyword: ");
+        scanf("%s", keyword);
+        printf("Digite a mensagem: ");
+        scanf("%s", message);
+        keyword = capitalize(keyword);
+        message = capitalize(message);
+        keystream = keystream_generator(keyword, message);
+        encriptedmessage = cifrador(keystream, message);
+        printf("%s\n", encriptedmessage);
+    }
 
-    printf("%s\n", keystream);
-
-    // Encriptar e decriptar
-    encriptedmessage = cifrador(keystream, message);
-    decriptedmessage = decifrador(keystream, encriptedmessage);
-    printf("%s\n", encriptedmessage);
-    printf("%s\n", decriptedmessage);
+    else if(*option == 'd') {
+        printf("Digite a keyword: ");
+        scanf("%s", keyword);
+        printf("Insira a mensagem encriptada: ");
+        scanf("%s", message);
+        keyword = capitalize(keyword);
+        message = capitalize(message);
+        keystream = keystream_generator(keyword, message);
+        decriptedmessage = decifrador(keystream, message);
+        printf("%s\n", decriptedmessage);
+    }
 
     return 0;
 }
