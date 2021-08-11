@@ -13,7 +13,7 @@ letters = 'abcdefghijklmnopqrstuvwxyz'
 def filter_string(string):
   string = ''.join(x.lower() for x in string if x.isalpha())
   return string
-
+  
 def show_coincidences(cipherText):
     counter = 0
     cipherLength = len(cipherText)
@@ -33,7 +33,7 @@ def get_c(sequence):
     frequency_sum = 0.0
     for letter in letters:
 	    frequency_sum+= sequence.count(letter) * (sequence.count(letter)-1)
-    if N*(N-1) <= 0: index = frequency_sum/N
+    if N*(N-1) <= 0: index = frequency_sum/1
     else: index = frequency_sum/(N*(N-1))
     return index
 
@@ -57,7 +57,7 @@ def print_coincidences(coincidences_array):
     for i in range(len(coincidences_array)):
         print(str(i) + ": " + str(coincidences_array[i]))
 
-def freq_analysis(seq, en):
+def frequencies(seq, en):
     chi_squared_array = [0] * 26
     if (en == True): letter_frequencies = en_frequencies
     else: letter_frequencies = pt_frequencies
@@ -81,7 +81,7 @@ def get_key(ciphertext, key_length, en):
 		sequence=""
 		for j in range(0,len(ciphertext[i:]), int(key_length)):
 			sequence+=ciphertext[i+j]
-		key += freq_analysis(sequence, en)
+		key += frequencies(sequence, en)
 	return key
 
 def main():
@@ -94,6 +94,7 @@ def main():
     probable_key_length(ciphertext)
     key_length_guess = input("Digite o tamanho da chave: ")
     print(get_key(ciphertext, key_length_guess, en))
+    print("Texto cifrado: " + ciphertext)
 
 if __name__ == '__main__':
     main()
