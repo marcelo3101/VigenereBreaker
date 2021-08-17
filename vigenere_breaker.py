@@ -35,21 +35,20 @@ def get_c(sequence):
 	    frequency_sum+= sequence.count(letter) * (sequence.count(letter)-1)
     if N*(N-1) <= 0: index = frequency_sum/1
     else: index = frequency_sum/(N*(N-1))
-    return index
+    return index * 26
 
-def probable_key_length(ciphertext):
+def probable_key_length(ciphertext, en):
+    if (en == True): print("\n\n--------> Procure valores próximos a 1.73 <--------\n")
+    else: print("\n\n--------> Procure valores próximos a 1.94 <--------\n")
     coincidences = []
     for guess in range(21):
         coincidence_sum = 0.0
-        average = 0.0
         for i in range(guess):
             letter_sequence = ""
             for j in range(0, len(ciphertext[i:]), guess):
                 letter_sequence += ciphertext[i+j]
             coincidence_sum = get_c(letter_sequence)
-        if not guess == 0:
-            average = coincidence_sum/guess
-        coincidences.append(average)
+        coincidences.append(coincidence_sum)
     print_coincidences(coincidences)
    
 
@@ -91,10 +90,9 @@ def main():
         en = False
     ciphertext_unfiltered = input("Digite o texto cifrado: ")
     ciphertext = filter_string(ciphertext_unfiltered)
-    probable_key_length(ciphertext)
+    probable_key_length(ciphertext, en)
     key_length_guess = input("Digite o tamanho da chave: ")
-    print(get_key(ciphertext, key_length_guess, en))
-    print("Texto cifrado: " + ciphertext)
+    print("Possível chave: " + get_key(ciphertext, key_length_guess, en))
 
 if __name__ == '__main__':
     main()
