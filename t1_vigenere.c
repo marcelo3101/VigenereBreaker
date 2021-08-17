@@ -37,13 +37,11 @@ char * cifrador(char keystream[1000], char message[1000]) {
 // Decifrador
 char * decifrador(char keystream[1000], char encripted_message[1000]){
     char * decripted = malloc(sizeof(char)*1000);
-
+    int j = 0;
     for( int i = 0; i < strlen(encripted_message); i++) {
-        if(encripted_message[i] == ' ') {
-            decripted[i] = ' ';
-        }
-        else {
-        decripted[i] = ((encripted_message[i] - keystream[i] + 26) % 26) + 'A';
+        if(encripted_message[i] != ' ') {
+            decripted[j] = ((encripted_message[i] - keystream[j] + 26) % 26) + 'A';
+            j++;
         }
     }
     
@@ -66,29 +64,21 @@ int main(){
     char * message = malloc(sizeof(char) * 1000),* keyword = malloc(sizeof(char) * 1000), * keystream = malloc(sizeof(char) * 1000), * encriptedmessage = malloc(sizeof(char) * 1000), * decriptedmessage = malloc(sizeof(char) * 1000);
     char * option = malloc(sizeof(char));
     // Receber keyword e mensagem
+    printf("Digite a keyword: ");
+    gets(keyword);
+    printf("Digite a mensagem: ");
+    gets(message);
+    keyword = capitalize(keyword);
+    message = capitalize(message);
+    keystream = keystream_generator(keyword, message);
     printf("Digite 'e' para encriptar e 'd' para decriptar ");
     scanf("%c", option);
 
     if(*option == 'e'){
-        printf("Digite a keyword: ");
-        scanf("%s", keyword);
-        printf("Digite a mensagem: ");
-        scanf("%s", message);
-        keyword = capitalize(keyword);
-        message = capitalize(message);
-        keystream = keystream_generator(keyword, message);
         encriptedmessage = cifrador(keystream, message);
         printf("%s\n", encriptedmessage);
     }
-
     else if(*option == 'd') {
-        printf("Digite a keyword: ");
-        scanf("%s", keyword);
-        printf("Insira a mensagem encriptada: ");
-        scanf("%s", message);
-        keyword = capitalize(keyword);
-        message = capitalize(message);
-        keystream = keystream_generator(keyword, message);
         decriptedmessage = decifrador(keystream, message);
         printf("%s\n", decriptedmessage);
     }
